@@ -9,20 +9,17 @@ terraform {
 }
 
 provider "aws" {
-  region = var.aws_region
+  region     = "us-east-1"
+  #access_key = "AKIAXXXX"
+  #secret_key = "e6XXX"
 }
-
-# Variables dinámicas desde Backstage
-variable "aws_region" {}
-variable "instance_name" {}
-variable "instance_type" {}
 
 # Crear VPC
 resource "aws_vpc" "test_vpc" {
   cidr_block = "10.0.0.0/16"
 
   tags = {
-    Name = "vpc-${var.instance_name}"
+    Name = "test-vpc"
   }
 }
 
@@ -33,18 +30,18 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "subnet-${var.instance_name}"
+    Name = "public-subnet"
   }
 }
 
 # Crear EC2 directamente
 resource "aws_instance" "my_ec2" {
-  ami           = "ami-0c55b159cbfafe1f0" # Amazon Linux 2
-  instance_type = var.instance_type
+  ami           = "ami-00ca32bbc84273381" # Amazon Linux 2
+  instance_type = "t2.micro"
   subnet_id     = aws_subnet.public.id
 
   tags = {
-    Name = var.instance_name
+    Name = "test-ec2"
   }
 }
 
