@@ -1,0 +1,8 @@
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: "${{ values.name + '-ec2' }}"
+  description: EC2 instance for "myapp"
+spec:
+  type: compute
+  owner: infra
