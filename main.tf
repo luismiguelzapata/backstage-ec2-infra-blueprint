@@ -1,45 +1,62 @@
 terraform {
-  #   backend "remote" {
-  #     organization = "sanjeevkt720"
-
-  #     workspaces {
-  #       name = "infrastructure-iac"
-  #     }
-  #   }
   required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 4.16"
     }
   }
-
   required_version = ">= 1.2.0"
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
 }
-data "terraform_remote_state" "core" {
-  backend = "remote"
 
-  config = {
-    organization = "sanjeevkt720"
-    workspaces = {
-      name = "infrastructure-iac"
-    }
+# Variables dinámicas desde Backstage
+variable "aws_region" {}
+variable "instance_name" {}
+variable "instance_type" {}
+
+# Crear VPC
+resource "aws_vpc" "test_vpc" {
+  cidr_block = "10.0.0.0/16"
+
+  tags = {
+    Name = "vpc-${var.instance_name}"
   }
 }
 
-# data "tfe_outputs" "core" {
-#   organization = "sanjeevkt720"
-#   workspace    = "infrastructure-iac"
-# }
+# Crear Subnet pública
+resource "aws_subnet" "public" {
+  vpc_id                  = aws_vpc.test_vpc.id
+  cidr_block              = "10.0.1.0/24"
+  map_public_ip_on_launch = true
 
-module "my_ec2" {
-  source        = "app.terraform.io/sanjeevkt720/ec2-infra/aws"
-  version       = "1.0.0"
-  name          = "${{ values.name }}"
-  instance_type = "${{ values.instanceType }}"
-  #   subnet        = data.tfe_outputs.core.values.subnet3_id
-  subnet = data.terraform_remote_state.core.outputs.subnet3_id
+  tags = {
+    Name = "subnet-${var.instance_name}"
+  }
+}
+
+# Crear EC2 directamente
+resource "aws_instance" "my_ec2" {
+  ami           = "ami-0c55b159cbfafe1f0" # Amazon Linux 2
+  instance_type = var.instance_type
+  subnet_id     = aws_subnet.public.id
+
+  tags = {
+    Name = var.instance_name
+  }
+}
+
+# Outputs
+output "vpc_id" {
+  value = aws_vpc.test_vpc.id
+}
+
+output "subnet_id" {
+  value = aws_subnet.public.id
+}
+
+output "ec2_id" {
+  value = aws_instance.my_ec2.id
 }
