@@ -1,1 +1,1 @@
-# backstage-templates
+# backstage-ec2-infra-template
