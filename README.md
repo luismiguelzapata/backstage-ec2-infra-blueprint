@@ -1,1 +1,1 @@
-# backstage-ec2-infra-template
+# backstage-ec2-infra-blueprint
