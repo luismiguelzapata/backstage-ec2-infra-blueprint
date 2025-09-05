@@ -3,6 +3,8 @@ kind: Resource
 metadata:
   name: "${{ values.name + '-ec2' }}"
   description: EC2 instance for "myapp"
+  annotations:
+    github.com/project-slug: luismiguelzapata/${{ values.name }}
 spec:
   type: compute
   owner: infra
