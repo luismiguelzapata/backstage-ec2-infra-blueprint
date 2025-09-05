@@ -4,7 +4,7 @@ metadata:
   name: "${{ values.name + '-ec2' }}"
   description: EC2 instance for "myapp"
   annotations:
-    github.com/project-slug: luismiguelzapata/${{ values.name }}
+    github.com/project-slug: luismiguelzapata/${{ values.name }}-infra
 spec:
   type: compute
   owner: infra
