@@ -1,5 +1,5 @@
-variable "${{ values.accessKey }}" {}
-variable "${{ values.secretKey }}" {}
-variable "${{ values.region }}" {}
-variable "${{ values.instanceType }}" {}
-variable "${{ values.instanceName }}" {}
+variable "access_key" {}
+variable "secret_key" {}
+variable "instance_type" {}
+variable "instance_name" {}
+variable "region" {}
