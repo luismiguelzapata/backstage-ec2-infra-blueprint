@@ -62,7 +62,6 @@ jobs:
       working-directory: .
       
     # Apply the Terraform plan
-    - name: Terraform vars
     - name: terraform apply
       run: terraform apply -var instance_name=${{ github.event.inputs.instance_name }} -var aws_region=${{ github.event.inputs.aws_region }} -var instance_type=${{ github.event.inputs.instance_type }} -auto-approve
       working-directory: .
@@ -103,6 +102,5 @@ jobs:
       
     # Destroy all resources 
     - name: Terraform Destroy
-    - name: terraform apply
       run: terraform destroy -var instance_name=${{ github.event.inputs.instance_name }} -var aws_region=${{ github.event.inputs.aws_region }} -var instance_type=${{ github.event.inputs.instance_type }} -auto-approve
       working-directory: .
