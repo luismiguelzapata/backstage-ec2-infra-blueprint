@@ -9,9 +9,9 @@ terraform {
 }
 
 provider "aws" {
-  region     = "us-east-1"
-  access_key = "AKIA2UC3BVFTDFSJ6A4T"
-  secret_key = "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"
+  region     = var.aws_region
+  access_key = var.access_key
+  secret_key = var.secret_key
 }
 
 # Crear VPC
@@ -37,11 +37,11 @@ resource "aws_subnet" "public" {
 # Crear EC2 directamente
 resource "aws_instance" "my_ec2" {
   ami           = "ami-00ca32bbc84273381" # Amazon Linux 2
-  instance_type = "t2.micro"
+  instance_type = var.instanceType
   subnet_id     = aws_subnet.public.id
 
   tags = {
-    Name = "test-ec2"
+    Name = var.instance_name
   }
 }
 
