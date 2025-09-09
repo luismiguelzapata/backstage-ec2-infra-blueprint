@@ -2,22 +2,21 @@
 name: Create an ec2 instance
 # This workflow is manually triggered using the GitHub Actions UI
 on:
-  push:
   workflow_dispatch:
     # Define inputs that are required for the manual trigger
-    # inputs:
-    #   instanceName:
-    #     description: 'Name of the AWS Instance'  # What's this input for?
-    #     required: true  # Is it optional or required?
-    #   awsRegion:
-    #     description: 'AWS Region for the instance'
-    #     required: true
-    #   instanceType:
-    #     description: 'AWS instance type'
-    #     required: true
-    #   action:
-    #     description: 'Action to perform (apply/destroy)'
-    #     required: true
+    inputs:
+      instance_name:
+        description: 'Name of the AWS Instance'  # What's this input for?
+        required: true  # Is it optional or required?
+      aws_region:
+        description: 'AWS Region for the instance'
+        required: true
+      instance_type:
+        description: 'AWS instance type'
+        required: true
+      action:
+        description: 'Action to perform (apply/destroy)'
+        required: true
 # Jobs to be executed in this workflow
 jobs:
   # Job for applying the ec2 instance
@@ -26,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     
     # Execute this step only if the action input is "apply"
-    # if: false
+    if: ${{ github.event.inputs.action == 'apply' }}
     # Define the steps for this job
     steps:
     
@@ -38,22 +37,19 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
-        aws-access-key-id: AKIA2UC3BVFTDFSJ6A4T
-        aws-secret-access-key: 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
-        aws-region: us-east-1 
-        #aws-session-token: 
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         
     #Installing Terraform
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
       with:
         terraform_version: "1.2.0"
-
       
     # Initialize Terraform 
     - name: Terraform Init
       run: terraform init
-      working-directory: .  # Where should this command be run?
+      working-directory: .  
       
     # Format Terraform code
     - name: Terraform Format
@@ -66,41 +62,47 @@ jobs:
       working-directory: .
       
     # Apply the Terraform plan
-    #- name: Terraform vars
+    - name: Terraform vars
     - name: terraform apply
-      run: terraform apply -auto-approve
+      run: terraform apply -var instance_name=${{ github.event.inputs.instance_name }} -var aws_region=${{ github.event.inputs.aws_region }} -var instance_type=${{ github.event.inputs.instance_type }} -auto-approve
       working-directory: .
 
   # Destroying the  ec2 instance
-#   destroy_instance:
-#     runs-on: ubuntu-latest
+  destroy_instance:
+    runs-on: ubuntu-latest
     
-#     # Execute this job only if the action input is "destroy"
-#     if: false
+    # Execute this job only if the action input is "destroy"
+    if: ${{ github.event.inputs.action == 'destroy' }}
     
-#     steps:
-#     - name: Checkout code
-#       uses: actions/checkout@v2
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
       
-# # adding aws keys. Please store the value of these key in GitHub variables
-#     - name: Configure AWS credentials
-#       uses: aws-actions/configure-aws-credentials@v2
-#       with:
-#         aws-access-key-id: AKIA2UC3ERDNMHUO7WEP
-#         aws-secret-access-key: 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
-#         # aws-session-token: 
+# adding aws keys. Please store the value of these key in GitHub variables
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        # aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+
+    #Installing Terraform
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: "1.2.0"
         
-#     - name: Terraform Init
-#       run: terraform init
-#       working-directory: .
+    - name: Terraform Init
+      run: terraform init
+      working-directory: .
       
-#     - name: Terraform FMT
-#       run: terraform fmt
-#       working-directory: .
+    - name: Terraform FMT
+      run: terraform fmt
+      working-directory: .
       
       
-#     # Destroy all resources 
-#     #- name: Terraform Destroy
-#     - name: terraform apply
-#       run: terraform destroy -var instanceName= -var awsRegion= -auto-approve
-#       working-directory: .
+    # Destroy all resources 
+    - name: Terraform Destroy
+    - name: terraform apply
+      run: terraform destroy -var instance_name=${{ github.event.inputs.instance_name }} -var aws_region=${{ github.event.inputs.aws_region }} -var instance_type=${{ github.event.inputs.instance_type }} -auto-approve
+      working-directory: .
