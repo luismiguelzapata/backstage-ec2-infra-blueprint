@@ -1,5 +1,5 @@
-variable "access_key" {}
-variable "secret_key" {}
-variable "aws_region" {}
-variable "instance_type" {}
-variable "instance_name" {}
+variable "${{ values.accessKey }}" {}
+variable "${{ values.secretKey }}" {}
+variable "${{ values.region }}" {}
+variable "${{ values.instanceType }}" {}
+variable "${{ values.instanceType }}" {}
