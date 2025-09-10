@@ -80,4 +80,4 @@ jobs:
   #       run: terraform destroy -auto-approve \
   #         -var instanceName=${{ github.event.inputs.instanceName }} \
   #         -var instanceType=${{ github.event.inputs.instanceType }} \
-          -var region=${{ github.event.inputs.region }}
+  #         -var region=${{ github.event.inputs.region }}
