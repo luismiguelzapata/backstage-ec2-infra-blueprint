@@ -1,0 +1,6 @@
+access_key    = "${{ values.accessKey }}"
+secret_key    = "${{ values.secretKey }}" 
+instance_type = "${{ values.instanceType }}"
+instance_name = "${{ values.instanceType }}"
+region        = "${{ values.region }}"
+action        = "${{ values.action }}"
