@@ -32,16 +32,16 @@ jobs:
 
       - name: Debug inputs
         run: |
-          echo "Action is: ${{ github.event.inputs.action }}"
-          echo "Instance name: ${{ github.event.inputs.instanceName }}"
-          echo "Region: ${{ github.event.inputs.region }}"
+          echo "Action is: "${{ values.action }}"
+          echo "Instance name: "${{ values.instanceName }}"
+          echo "Region: "${{ values.region }}"
           
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ github.event.inputs.accessKey }}
-          aws-secret-access-key: ${{ github.event.inputs.secretKey }}
-          aws-region: ${{ github.event.inputs.region }}
+          aws-access-key-id: "${{ values.accessKey }}"
+          aws-secret-access-key: "${{ values.secretKey }}"
+          aws-region: "${{ values.region }}"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -53,9 +53,9 @@ jobs:
 
       - name: Terraform Apply
         run: terraform apply -auto-approve \
-          -var instanceName=${{ github.event.inputs.instanceName }} \
-          -var instanceType=${{ github.event.inputs.instanceType }} \
-          -var region=${{ github.event.inputs.region }}
+          -var instanceName="${{ values.instanceName }}" \
+          -var instanceType="${{ values.instanceType }}" \
+          -var region="${{ values.region }}"
 
   # destroy_ec2:
   #   runs-on: ubuntu-latest
