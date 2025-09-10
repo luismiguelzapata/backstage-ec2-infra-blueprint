@@ -52,10 +52,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve \
-          -var instanceName="${{ values.instanceName }}" \
-          -var instanceType="${{ values.instanceType }}" \
-          -var region="${{ values.region }}"
+        run: terraform apply -auto-approve 
 
   # destroy_ec2:
   #   runs-on: ubuntu-latest
