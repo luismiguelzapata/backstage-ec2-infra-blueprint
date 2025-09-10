@@ -1,3 +1,3 @@
 # backstage-ec2-infra-blueprint
 
-Template que crea el componente "${{ values.name }}" en el resource "${{ values.name + '-ec2' }}"
+Template que crea el resource "${{ values.infraName + '-ec2' }}" del componente "${{ values.name }}"
