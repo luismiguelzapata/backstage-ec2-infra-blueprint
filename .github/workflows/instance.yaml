@@ -32,9 +32,9 @@ jobs:
 
       - name: Debug inputs
         run: |
-          echo "Action is: "${{ values.action }}"
-          echo "Instance name: "${{ values.instanceName }}"
-          echo "Region: "${{ values.region }}"
+          echo Action is: "${{ values.action }}"
+          echo Instance name: "${{ values.instanceName }}"
+          echo Region: "${{ values.region }}"
           
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
