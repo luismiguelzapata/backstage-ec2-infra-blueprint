@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       instanceName:
-        description: Name of the EC2 instance
+        description: EC2 instance name
         required: true
       instanceType:
-        description: Instance type
+        description: EC2 instance type
         required: true
       accessKey:
         description: AWS Access Key
@@ -16,7 +16,7 @@ on:
         description: AWS Secret Key
         required: true
       region:
-        description: AWS Region
+        description: AWS region
         required: true
       action:
         description: Action (apply/destroy)
